@@ -1,0 +1,7 @@
+import { HttpException } from ".";
+
+export class UnprocessableEntityError extends HttpException {
+    constructor(error: any, message: string, errorCode: number) {
+        super(message, errorCode, 422, error);
+    }
+}
