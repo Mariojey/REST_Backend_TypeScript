@@ -5,3 +5,11 @@ export const SignUpSchema = z.object({
     email: z.string().email(),
     password: z.string().min(6).max(100)
 })
+
+export const LocalizationSchema = z.object({
+    street: z.string(),
+    city: z.string(),
+    state: z.string(),
+    zipCode: z.string().min(5).max(10),
+    country: z.string()
+});
