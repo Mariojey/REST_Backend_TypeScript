@@ -13,13 +13,31 @@ datasource db {
   provider = "postgresql"
 }
 
+enum EUserRole {
+  USER
+  ADMIN
+}
+
 model User {
   id Int @id @default(autoincrement())
   username String @unique
   email String @unique
   password String
+  role EUserRole @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("users")
+}
+
+model Item {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  price Decimal
+  tags String
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+
+  @@map("items")
 }
