@@ -12,7 +12,7 @@ export const catchError = (controller: Function) => {
 
             if( error instanceof HttpException){
                 exception = error;
-            }else{
+            }else{ 
                 exception = new InternalException("Internal server error", error, ErrorCodes.INTERNAL_SERVER_ERROR);
             }
 
