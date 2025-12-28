@@ -13,3 +13,11 @@ export const LocalizationSchema = z.object({
     zipCode: z.string().min(5).max(10),
     country: z.string()
 });
+
+export const UpdateUserSchema = z.object({
+
+    username: z.string().min(3).max(30).optional(),
+    defaultShippingLocalization: z.number().optional(),
+    defaultBillingLocalization: z.number().optional()
+
+})
