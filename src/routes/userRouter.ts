@@ -2,7 +2,7 @@ import { Router } from "express";
 import { authMiddleware } from "../middlewares/authMiddleware";
 import { adminMiddleware } from "../middlewares/adminMiddleware";
 import { catchError } from "../catchError";
-import { createLocalizationController, getLocalizationsController, updateLocalizationController } from "../controllers/userController";
+import { createLocalizationController, getLocalizationsController, deleteLocalizationController, updateUserController } from "../controllers/userController";
 
 const userRouter : Router = Router();
 
@@ -10,6 +10,8 @@ userRouter.get('/localizations', [authMiddleware], catchError(getLocalizationsCo
 
 userRouter.post('/localizations', [authMiddleware], catchError(createLocalizationController));
 
-userRouter.put('/localizations/:id', [authMiddleware], catchError(updateLocalizationController));
+userRouter.delete('/localizations/:id', [authMiddleware], catchError(deleteLocalizationController));
+
+userRouter.put('/', [authMiddleware], catchError(updateUserController))
 
 export default userRouter;
