@@ -1,11 +1,24 @@
 import type { Request, Response } from "express";
-import { AddCartSchema } from "../schema/cart";
+import { AddCartSchema, UpdateQuantitySchema } from "../schema/cart";
 import { NotFoundError } from "../exceptions/notFound";
 import { ErrorCodes } from "../exceptions";
 import { CardItem, Item } from "../../generated/prisma/client";
 import { prisma } from "../prisma";
 
-export const getCart = (req: Request, res: Response) => {
+export const getCart = async (req: Request, res: Response) => {
+
+    const cart = await prisma.cardItem.findMany({
+        where: {
+            userId: req.user.id
+        },
+        include: {
+            item: true
+        }
+    })
+
+    await prisma.$disconnect();
+
+    res.json(cart);
 
 }
 
@@ -73,6 +86,21 @@ export const removeItemFromCart = async (req: Request, res: Response) => {
 
 }
 
-export const updateItemQuantity = (req: Request, res: Response) => {
+export const updateItemQuantity = async (req: Request, res: Response) => {
+
+    const dataToSet = UpdateQuantitySchema.parse(req.body);
+
+    const updatedCartItem = await prisma.cardItem.update({
+        where: {
+            id: Number(req.params.id)
+        },
+        data: {
+            quantity: dataToSet.quantity
+        }
+    });
+
+    await prisma.$disconnect();
+
+    res.json(updatedCartItem);
 
 }
