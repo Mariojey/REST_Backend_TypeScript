@@ -18,6 +18,14 @@ enum EUserRole {
   ADMIN
 }
 
+enum EOrderStatus {
+  PENDING
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
 model User {
   id Int @id @default(autoincrement())
   username String @unique
@@ -31,6 +39,7 @@ model User {
 
   localizations Localization[]
   cardItems CardItem[]
+  orders Order[]
 
   @@map("users")
 }
@@ -45,6 +54,7 @@ model Item {
   updateAt DateTime @updatedAt
 
   cardItems CardItem[]
+  orderItems OrderItem[]
 
   @@map("items")
 }
@@ -75,4 +85,46 @@ model CardItem {
   updatedAt DateTime @updatedAt
 
   @@map("card_items")
+}
+
+model Order {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  total Decimal
+  localization String
+  status String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orderItems OrderItem[]
+  orderEvents OrderEvent[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Order @relation(fields: [orderId], references: [id])
+  itemId Int
+  item Item @relation(fields: [itemId], references: [id])
+  quantity Int @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_items")
+}
+
+model OrderEvent {
+  id Int @id @default(autoincrement())
+  orderId Int
+  order Order @relation(fields: [orderId], references: [id])
+  eventType String
+  eventStatus EOrderStatus @default(PENDING)
+  eventTimestamp DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_events")
 }
